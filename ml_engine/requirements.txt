@@ -1,0 +1,21 @@
+# Machine Learning & Numerical Computing
+numpy>=1.26.0,<3.0.0
+pandas>=2.2.0
+scipy>=1.12.0
+scikit-learn>=1.4.0
+joblib>=1.3.2
+
+# Satellite & Geospatial Data Handling
+xarray>=2024.2.0
+netCDF4>=1.6.5
+h5py>=3.10.0
+
+# HTTP & API Ingestion
+requests>=2.31.0
+httpx>=0.27.0
+pyyaml>=6.0.1
+python-dotenv>=1.0.1
+tqdm>=4.66.2
+
+# Testing & Quality
+pytest>=8.1.0

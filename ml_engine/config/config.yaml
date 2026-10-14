@@ -1,0 +1,41 @@
+# AquaSense-IoT Machine Learning Engine Configuration
+
+data_sources:
+  ismn:
+    raw_dir: "./data/raw/ismn"
+    target_depth_cm: 20
+    quality_flags_accepted: ["G"]  # Only include "Good" quality measurements
+  smap:
+    raw_dir: "./data/raw/smap"
+    product_short_name: "SPL3SMP_E" # Enhanced Radiometer 9 km
+    variables:
+      - "soil_moisture"
+      - "retrieval_qual_flag"
+      - "surface_water_fraction_mb"
+  weather:
+    raw_dir: "./data/raw/weather"
+    features:
+      - "temperature_2m"
+      - "relative_humidity_2m"
+      - "precipitation"
+      - "surface_pressure"
+      - "shortwave_radiation_instant"
+      - "et0_fao_evapotranspiration"
+
+training:
+  target_column: "soil_moisture_root_zone"
+  forecast_horizons_hours: [24, 48, 72]
+  test_size: 0.20
+  validation_size: 0.15
+  random_state: 42
+  time_series_split_folds: 5
+  models:
+    - "ridge"
+    - "random_forest"
+    - "gradient_boosting"
+
+metrics:
+  - "rmse"
+  - "mae"
+  - "r2"
+  - "ubrmse"  # Unbiased RMSE (standard metric in hydrological remote sensing)

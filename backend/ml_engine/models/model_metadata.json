@@ -1,0 +1,166 @@
+{
+  "project": "AquaSense-IoT",
+  "milestone": "Milestone 4: Machine Learning Model Training & Evaluation",
+  "timestamp_created_utc": "2026-10-12T13:34:05.518403+00:00",
+  "target": {
+    "variable": "soil_moisture_7_to_28cm",
+    "description": "Root-zone volumetric soil moisture in 7-28 cm depth stratum",
+    "depth": "7-28 cm (Primary Root-Zone)",
+    "unit": "m3/m3 (Volumetric Water Content)",
+    "horizon_hours": 24,
+    "alignment": "Observation at t matched to ground-truth at t + 24 hours"
+  },
+  "data_source": {
+    "provider": "Open-Meteo ERA5 Reanalysis",
+    "source_type": "WEATHER_MODEL_DERIVED",
+    "coordinates": {
+      "latitude": 15.8281,
+      "longitude": 78.0373
+    },
+    "raw_dataset": "..\\data\\processed_data.csv"
+  },
+  "sample_counts": {
+    "total_clean_samples": 9952,
+    "train_samples": 6966,
+    "validation_samples": 1492,
+    "test_samples": 1494
+  },
+  "split_date_ranges": {
+    "train": [
+      "2024-01-02T00:00:00+00:00",
+      "2024-10-18T05:00:00+00:00"
+    ],
+    "validation": [
+      "2024-10-18T06:00:00+00:00",
+      "2024-12-19T09:00:00+00:00"
+    ],
+    "test": [
+      "2024-12-19T10:00:00+00:00",
+      "2025-02-19T15:00:00+00:00"
+    ]
+  },
+  "features": {
+    "count": 22,
+    "feature_names": [
+      "sm_root_current",
+      "sm_root_lag_1h",
+      "sm_root_lag_3h",
+      "sm_root_lag_6h",
+      "sm_root_lag_24h",
+      "sm_surface_0_to_7cm",
+      "sm_deep_28_to_100cm",
+      "soil_temp_root_c",
+      "soil_temp_surface_c",
+      "air_temp_2m_c",
+      "relative_humidity_pct",
+      "surface_pressure_hpa",
+      "wind_speed_kmh",
+      "et0_current_mm",
+      "et0_rolling_24h_sum_mm",
+      "precip_current_mm",
+      "precip_rolling_6h_sum_mm",
+      "precip_rolling_24h_sum_mm",
+      "shortwave_radiation_wm2",
+      "hour_sin",
+      "hour_cos",
+      "day_of_year"
+    ],
+    "excluded_features": [
+      "future_realized_precipitation",
+      "future_realized_weather",
+      "satellite_skin_moisture (unpopulated in historical period)",
+      "ground_probe_telemetry (unpopulated in historical period)"
+    ]
+  },
+  "selected_best_model": "RidgeRegression",
+  "evaluation_metrics": {
+    "validation": {
+      "PersistenceBaseline": {
+        "sample_count": 1492,
+        "mae": 0.005872,
+        "rmse": 0.008371,
+        "r2": -0.161456,
+        "bias_mbe": 4e-05,
+        "ubrmse": 0.008371
+      },
+      "RidgeRegression": {
+        "sample_count": 1492,
+        "mae": 0.005621,
+        "rmse": 0.007242,
+        "r2": 0.130826,
+        "bias_mbe": -0.00111,
+        "ubrmse": 0.007156
+      },
+      "RandomForest": {
+        "sample_count": 1492,
+        "mae": 0.007727,
+        "rmse": 0.008797,
+        "r2": -0.282633,
+        "bias_mbe": -0.004271,
+        "ubrmse": 0.007691
+      },
+      "HistGradientBoosting": {
+        "sample_count": 1492,
+        "mae": 0.009739,
+        "rmse": 0.011079,
+        "r2": -1.034363,
+        "bias_mbe": -0.005756,
+        "ubrmse": 0.009466
+      }
+    },
+    "test": {
+      "PersistenceBaseline": {
+        "sample_count": 1494,
+        "mae": 0.007097,
+        "rmse": 0.009244,
+        "r2": -0.455201,
+        "bias_mbe": -6.5e-05,
+        "ubrmse": 0.009244
+      },
+      "RidgeRegression": {
+        "sample_count": 1494,
+        "mae": 0.007045,
+        "rmse": 0.008343,
+        "r2": -0.185265,
+        "bias_mbe": -0.002473,
+        "ubrmse": 0.007968
+      },
+      "RandomForest": {
+        "sample_count": 1494,
+        "mae": 0.007429,
+        "rmse": 0.009293,
+        "r2": -0.470695,
+        "bias_mbe": -0.003884,
+        "ubrmse": 0.008443
+      },
+      "HistGradientBoosting": {
+        "sample_count": 1494,
+        "mae": 0.007812,
+        "rmse": 0.009644,
+        "r2": -0.58377,
+        "bias_mbe": -0.004604,
+        "ubrmse": 0.008474
+      }
+    }
+  },
+  "artifacts": {
+    "model_pipeline_v1": "..\\ml_engine\\models\\root_zone_model_v1.joblib",
+    "model_pipeline_active": "..\\ml_engine\\models\\root_zone_model.joblib",
+    "comparison_table": "..\\ml_engine\\models\\model_comparison.csv",
+    "test_predictions": "..\\ml_engine\\models\\test_predictions.csv",
+    "actual_vs_predicted_plot": "..\\ml_engine\\models\\actual_vs_predicted.png",
+    "residual_plot": "..\\ml_engine\\models\\residual_plot.png"
+  },
+  "environment_versions": {
+    "python": "3.12.10",
+    "scikit_learn": "1.9.1",
+    "joblib": "1.6.0",
+    "pandas": "3.0.6",
+    "numpy": "2.5.3"
+  },
+  "scientific_limitations": [
+    "Source origin: The training data originates from ERA5 numerical reanalysis, not independent physical in-situ sensor ground truth.",
+    "Sample span: The initial historical training set spans 15 days (312 valid 24h pairs); while sufficient to benchmark persistence vs ML algorithms, it does not capture full multi-season annual dynamics.",
+    "Depth stratification: Target is 7-28 cm root zone; satellite SMAP surface skin moisture (0-5 cm) was not available for direct assimilation during this historical window."
+  ]
+}

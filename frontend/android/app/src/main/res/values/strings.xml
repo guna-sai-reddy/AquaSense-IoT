@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">AquaSense-IoT</string>
+    <string name="title_activity_main">AquaSense-IoT</string>
+    <string name="package_name">org.aquasense.iot</string>
+    <string name="custom_url_scheme">org.aquasense.iot</string>
+</resources>

@@ -1,0 +1,5 @@
+model_name,val_rmse,val_mae,val_r2,test_rmse,test_mae,test_r2,test_ubrmse,test_bias_mbe,rmse_improvement_pct,mae_improvement_pct,is_selected
+PersistenceBaseline,0.008371,0.005872,-0.161456,0.009244,0.007097,-0.455201,0.009244,-6.5e-05,0.0,0.0,False
+RidgeRegression,0.007242,0.005621,0.130826,0.008343,0.007045,-0.185265,0.007968,-0.002473,9.75,0.73,True
+RandomForest,0.008797,0.007727,-0.282633,0.009293,0.007429,-0.470695,0.008443,-0.003884,-0.53,-4.68,False
+HistGradientBoosting,0.011079,0.009739,-1.034363,0.009644,0.007812,-0.58377,0.008474,-0.004604,-4.33,-10.07,False

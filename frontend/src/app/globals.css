@@ -1,0 +1,120 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 15, 23, 42;
+  --background-rgb: 248, 250, 252;
+  --primary: 5, 150, 105; /* Emerald 600 */
+  --primary-hover: 4, 120, 87;
+  --primary-light: 236, 253, 245;
+  --primary-dark: 6, 78, 59;
+}
+
+/* Emerald Palette (Default) */
+[data-palette="emerald"] {
+  --primary: 5, 150, 105;
+  --primary-hover: 4, 120, 87;
+  --primary-light: 236, 253, 245;
+  --primary-dark: 6, 78, 59;
+}
+
+/* Ocean / Hydrology Palette */
+[data-palette="ocean"] {
+  --primary: 2, 132, 199; /* Sky / Ocean 600 */
+  --primary-hover: 3, 105, 161;
+  --primary-light: 240, 249, 255;
+  --primary-dark: 12, 74, 110;
+}
+
+/* Amber / Harvest Earth Palette */
+[data-palette="amber"] {
+  --primary: 217, 119, 6; /* Amber 600 */
+  --primary-hover: 180, 83, 9;
+  --primary-light: 255, 251, 235;
+  --primary-dark: 120, 53, 15;
+}
+
+/* Dark Mode Variables */
+.dark {
+  --foreground-rgb: 241, 245, 249;
+  --background-rgb: 15, 23, 42;
+}
+
+.dark[data-palette="emerald"] {
+  --primary-light: 6, 78, 59;
+}
+
+.dark[data-palette="ocean"] {
+  --primary-light: 12, 74, 110;
+}
+
+.dark[data-palette="amber"] {
+  --primary-light: 120, 53, 15;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background-color: rgb(var(--background-rgb));
+  font-feature-settings: "rlig" 1, "calt" 1;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* Dynamic theme background helper */
+.theme-bg-primary {
+  background-color: rgb(var(--primary));
+}
+
+.theme-text-primary {
+  color: rgb(var(--primary));
+}
+
+.theme-border-primary {
+  border-color: rgb(var(--primary));
+}
+
+/* Native Mobile Safe Area & Touch Optimization */
+@supports (padding: max(0px)) {
+  .safe-area-pb {
+    padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+  }
+}
+
+/* Custom Scrollbar Styling for Constant Sidebar & Dashboard Scroll */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(241, 245, 249, 0.6);
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.6);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.6);
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.9);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(71, 85, 105, 0.7);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.9);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
