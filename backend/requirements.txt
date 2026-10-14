@@ -33,5 +33,4 @@ passlib==1.7.4
 bcrypt==4.0.1
 email-validator==2.3.0
 
-# HDF5 (satellite/SMAP data files)
-h5py==<the version from Step 1>
+
