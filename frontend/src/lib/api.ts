@@ -28,8 +28,13 @@ import {
   WeatherObservation,
 } from "./types";
 
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
+const RAW_API_URL = (
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1"
+).replace(/\/+$/, "");
+
+const API_BASE_URL = RAW_API_URL.endsWith("/api/v1")
+  ? RAW_API_URL
+  : `${RAW_API_URL}/api/v1`;
 
 const BACKEND_ROOT_URL = API_BASE_URL.replace(/\/api\/v1\/?$/, "");
 
