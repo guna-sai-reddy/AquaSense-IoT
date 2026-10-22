@@ -98,7 +98,17 @@ function AdminContent() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, isAdmin, authLoading, router]);
 
-  // Non-Admin Access Restriction
+  // Show loading spinner while auth context is resolving
+  if (authLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center p-12 text-center space-y-3 my-12">
+        <RefreshCw className="h-8 w-8 text-emerald-600 animate-spin" />
+        <p className="text-xs text-slate-500 font-medium">Verifying administrator session…</p>
+      </div>
+    );
+  }
+
+  // Non-Admin Access Restriction — uses is_superuser, no email hardcoding
   if (!isAdmin) {
     return (
       <div className="flex flex-col items-center justify-center p-12 bg-white rounded-2xl border border-slate-200 text-center space-y-4 shadow-sm max-w-xl mx-auto my-12">
@@ -107,11 +117,15 @@ function AdminContent() {
         </div>
         <h2 className="text-xl font-bold text-slate-900">Administrator Access Required</h2>
         <p className="text-xs text-slate-600 leading-relaxed">
-          The governance and fleet administration console is strictly restricted to designated administrator credentials (
-          <code className="text-slate-800 font-bold">admin@aquasense.org</code>). Your account (
-          <code className="text-slate-800 font-bold">{user?.email}</code>) does not possess administrator privileges.
+          The governance and fleet administration console is strictly restricted to accounts with superuser privileges.
+          {user?.email && (
+            <>
+              {" "}Your account (<code className="text-slate-800 font-bold">{user.email}</code>) does not have{" "}
+              <code className="text-slate-800 font-bold">is_superuser = true</code>.
+            </>
+          )}
         </p>
-        <p className="text-xs text-slate-500 font-medium">Redirecting you to the Overview page...</p>
+        <p className="text-xs text-slate-500 font-medium">Redirecting you to the Overview page…</p>
         <Link
           href="/"
           className="inline-flex items-center px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold transition"
@@ -344,7 +358,37 @@ function AdminContent() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                {filteredUsers.map((u) => (
+                {loading ? (
+                  <tr>
+                    <td colSpan={7} className="py-10 text-center text-slate-400">
+                      <RefreshCw className="h-5 w-5 mx-auto animate-spin text-emerald-600 mb-2" />
+                      <span>Loading user accounts…</span>
+                    </td>
+                  </tr>
+                ) : error ? (
+                  <tr>
+                    <td colSpan={7} className="py-10 text-center">
+                      <div className="flex flex-col items-center space-y-2">
+                        <AlertTriangle className="h-5 w-5 text-red-500" />
+                        <p className="text-xs text-red-600 font-semibold">Failed to load users from the API</p>
+                        <p className="text-xs text-slate-400 max-w-sm">{error}</p>
+                        <button type="button" onClick={loadAdminData} className="text-xs font-semibold text-emerald-700 underline mt-1">
+                          Retry
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ) : filteredUsers.length === 0 ? (
+                  <tr>
+                    <td colSpan={7} className="py-10 text-center text-slate-400">
+                      <Users className="h-5 w-5 mx-auto mb-2 text-slate-300" />
+                      <span>
+                        {searchQuery ? `No users matching "${searchQuery}".` : "No registered users found in the database yet."}
+                      </span>
+                    </td>
+                  </tr>
+                ) : (
+                  filteredUsers.map((u) => (
                   <tr key={u.id} className="hover:bg-slate-50/70 transition">
                     <td className="py-3 px-4 font-mono font-bold text-slate-900">{u.email}</td>
                     <td className="py-3 px-4 text-slate-700">{u.full_name || "—"}</td>
@@ -402,7 +446,8 @@ function AdminContent() {
                       </button>
                     </td>
                   </tr>
-                ))}
+                ))
+                )}
               </tbody>
             </table>
           </div>

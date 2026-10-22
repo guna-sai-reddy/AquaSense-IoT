@@ -52,7 +52,8 @@ async def register_user(
     db: Annotated[AsyncSession, Depends(get_db)],
 ):
     """Registers a new user account with bcrypt password hashing."""
-    stmt = select(User).where(User.email == user_in.email)
+    normalized_email = user_in.email.strip().lower()
+    stmt = select(User).where(User.email == normalized_email)
     existing = (await db.execute(stmt)).scalar_one_or_none()
     if existing:
         raise HTTPException(
@@ -61,7 +62,7 @@ async def register_user(
         )
 
     user = User(
-        email=user_in.email,
+        email=normalized_email,
         hashed_password=get_password_hash(user_in.password),
         full_name=user_in.full_name,
         is_active=True,
@@ -110,7 +111,10 @@ async def login(
             detail="Valid email/username and password are required.",
         )
 
-    stmt = select(User).where(User.email == str(username))
+    # Normalize email consistently with registration and password-reset
+    normalized_email = str(username).strip().lower()
+
+    stmt = select(User).where(User.email == normalized_email)
     user = (await db.execute(stmt)).scalar_one_or_none()
 
     if user is None or not verify_password(str(password), user.hashed_password):

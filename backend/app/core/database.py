@@ -67,6 +67,36 @@ async def check_database_connection() -> Tuple[bool, str]:
         return False, error_msg
 
 
+async def _seed_dev_admin(session: AsyncSession) -> None:
+    """Inserts a default development admin into SQLite if no users exist.
+
+    This runs ONLY when the SQLite fallback is active (PostgreSQL is offline).
+    It does NOT touch the production Neon PostgreSQL database.
+    """
+    try:
+        from sqlalchemy import select
+        from app.models.user import User
+        from app.core.security import get_password_hash
+
+        result = await session.execute(select(User).limit(1))
+        if result.scalar_one_or_none() is None:
+            admin = User(
+                email="admin@aquasense.io",
+                hashed_password=get_password_hash("Admin@12345"),
+                full_name="AquaSense Administrator",
+                is_active=True,
+                is_superuser=True,
+            )
+            session.add(admin)
+            await session.commit()
+            logger.info(
+                "Dev SQLite admin seeded: admin@aquasense.io (password: Admin@12345) — "
+                "local development only, not production."
+            )
+    except Exception as exc:
+        logger.warning(f"Dev admin seeding skipped: {exc}")
+
+
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
     """FastAPI dependency yielding an async database session per request.
 
@@ -93,6 +123,9 @@ async def get_db() -> AsyncGenerator[AsyncSession, None]:
         if not _dev_tables_initialized:
             async with dev_engine.begin() as conn:
                 await conn.run_sync(Base.metadata.create_all)
+            # Seed default dev admin on first initialization
+            async with dev_session_factory() as seed_session:
+                await _seed_dev_admin(seed_session)
             _dev_tables_initialized = True
 
         async with dev_session_factory() as session:
@@ -103,3 +136,4 @@ async def get_db() -> AsyncGenerator[AsyncSession, None]:
                 raise
             finally:
                 await session.close()
+

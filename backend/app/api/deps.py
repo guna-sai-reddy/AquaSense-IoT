@@ -55,11 +55,16 @@ async def get_current_user(
 async def get_current_superuser(
     current_user: Annotated[User, Depends(get_current_user)],
 ) -> User:
-    """Verifies that the authenticated user possesses administrative superuser privileges."""
-    if not current_user.is_superuser or current_user.email != "admin@aquasense.org":
+    """Verifies that the authenticated user possesses administrative superuser privileges.
+
+    Access is granted to any active user whose ``is_superuser`` flag is True.
+    No email address is hardcoded — email-based restrictions are an anti-pattern
+    that breaks when the admin account email changes or a second admin is created.
+    """
+    if not current_user.is_superuser:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="The current user does not have administrative privileges. Admin access is strictly reserved for admin@aquasense.org.",
+            detail="Administrative privileges required. This account does not have superuser access.",
         )
     return current_user
 
