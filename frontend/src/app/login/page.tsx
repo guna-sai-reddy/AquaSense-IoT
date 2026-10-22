@@ -304,6 +304,17 @@ function LoginForm() {
             <span>{loading ? "Signing in..." : "👉 Enter Farm Dashboard"}</span>
             <ArrowRight className="h-4 w-4" />
           </button>
+
+          {/* Register Link */}
+          <div className="pt-1 text-center text-xs text-slate-500 dark:text-slate-400">
+            Don&apos;t have an account?{" "}
+            <Link
+              href="/register"
+              className="font-bold text-emerald-700 dark:text-emerald-400 hover:text-emerald-800 hover:underline"
+            >
+              🌱 Create Account
+            </Link>
+          </div>
         </form>
 
         {/* Reset Password Action Row for Users & Admin */}

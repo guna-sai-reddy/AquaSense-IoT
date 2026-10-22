@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   Activity,
   AlertCircle,
@@ -20,8 +21,12 @@ import { DatabaseHealthResponse, SystemStatusResponse } from "@/lib/types";
 import { AuthGuard } from "@/components/auth/auth-guard";
 import { DashboardLayout } from "@/components/layout/dashboard-layout";
 import { CardSkeleton } from "@/components/ui/loading-skeleton";
+import { useAuth } from "@/lib/auth-context";
 
 export default function SystemHealthPage() {
+  const router = useRouter();
+  const { user, isLoading: authLoading } = useAuth();
+
   const [health, setHealth] = useState<any>(null);
   const [dbHealth, setDbHealth] = useState<DatabaseHealthResponse | null>(null);
   const [systemStatus, setSystemStatus] = useState<SystemStatusResponse | null>(null);
@@ -59,6 +64,13 @@ export default function SystemHealthPage() {
   useEffect(() => {
     loadHealthData();
   }, []);
+
+  // Redirect non-admin users away from this page
+  useEffect(() => {
+    if (!authLoading && user && !user.is_superuser) {
+      router.replace("/?access=denied");
+    }
+  }, [authLoading, user, router]);
 
   const handleCopyRemedy = (text: string) => {
     navigator.clipboard.writeText(text);

@@ -108,7 +108,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [fields, setFields] = useState<Field[]>([]);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
-  const isAdmin = user?.email === "admin@aquasense.org" && Boolean(user?.is_superuser);
+  const isAdmin = Boolean(user?.is_superuser);
 
   // Periodic health check ping (30s) & load fields for search
   useEffect(() => {
@@ -406,7 +406,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
               )}
               {[
                 ...(isAdmin ? [{ href: "/admin", key: "navAdmin", icon: ShieldCheck, tag: "Admin" }] : []),
-                { href: "/system-health", key: "navSystemHealth", icon: Activity },
+                ...(isAdmin ? [{ href: "/system-health", key: "navSystemHealth", icon: Activity, tag: "Admin" }] : []),
                 { href: "/account", key: "navAccount", icon: UserIcon },
               ].map((item) => {
                 const Icon = item.icon;
