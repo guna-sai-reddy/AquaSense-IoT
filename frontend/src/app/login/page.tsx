@@ -71,36 +71,6 @@ function LoginForm() {
     }
   };
 
-  const handleQuickFarmerLogin = async () => {
-    setEmail("researcher@aquasense.org");
-    setPassword("SecurePassword123!");
-    setError(null);
-    setLoading(true);
-    try {
-      await login("researcher@aquasense.org", "SecurePassword123!");
-      router.push("/");
-    } catch (err: any) {
-      setError(err.message || "Failed to log in.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleQuickAdminLogin = async () => {
-    setEmail("admin@aquasense.org");
-    setPassword("AdminPassword123!");
-    setError(null);
-    setLoading(true);
-    try {
-      await login("admin@aquasense.org", "AdminPassword123!");
-      router.push("/");
-    } catch (err: any) {
-      setError(err.message || "Failed to log in.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleRequestResetPIN = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     if (!resetEmail.trim()) {
@@ -250,7 +220,7 @@ function LoginForm() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="farmer@aquasense.org"
+                placeholder="farmer@example.com"
                 className="block w-full rounded-xl border-2 border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 pl-11 pr-4 py-3 text-sm font-semibold text-slate-900 dark:text-white placeholder-slate-400 focus:border-emerald-500 focus:bg-white focus:outline-hidden transition"
               />
             </div>
@@ -407,7 +377,7 @@ function LoginForm() {
                       required
                       value={resetEmail}
                       onChange={(e) => setResetEmail(e.target.value)}
-                      placeholder="e.g. admin@aquasense.org or farmer@..."
+                      placeholder="e.g. admin@aquasense.io or farmer@..."
                       className="block w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 pl-10 pr-3 py-2.5 text-sm font-semibold text-slate-900 dark:text-white placeholder-slate-400 focus:border-emerald-500 focus:outline-hidden"
                     />
                   </div>
@@ -421,12 +391,12 @@ function LoginForm() {
                   <div className="grid grid-cols-2 gap-2 text-xs">
                     <button
                       type="button"
-                      onClick={() => setResetEmail("admin@aquasense.org")}
+                      onClick={() => setResetEmail("admin@aquasense.io")}
                       className="px-2.5 py-2 rounded-xl border border-purple-200 dark:border-purple-900 bg-purple-50 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 text-left font-semibold hover:border-purple-400 transition"
                     >
                       👑 Admin Account
                       <span className="block text-[10px] text-purple-600/70 dark:text-purple-400 truncate">
-                        admin@aquasense.org
+                        admin@aquasense.io
                       </span>
                     </button>
                     <button

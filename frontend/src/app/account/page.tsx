@@ -39,7 +39,7 @@ export default function AccountPage() {
                     <CheckCircle2 className="h-3 w-3 mr-1 text-emerald-600" />
                     Active Account
                   </span>
-                  {user?.email === "admin@aquasense.org" && user?.is_superuser ? (
+                  {user?.is_superuser ? (
                     <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-purple-100 text-purple-800 border border-purple-200">
                       <ShieldCheck className="h-3.5 w-3.5 mr-1 text-purple-700" />
                       Platform Administrator (Superuser)

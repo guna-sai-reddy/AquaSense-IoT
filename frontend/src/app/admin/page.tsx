@@ -83,7 +83,7 @@ function AdminContent() {
     }
   };
 
-  const isAdmin = user?.email === "admin@aquasense.org" && Boolean(user?.is_superuser);
+  const isAdmin = Boolean(user?.is_superuser);
 
   useEffect(() => {
     if (isAdmin) {
