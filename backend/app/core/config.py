@@ -17,11 +17,12 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24  # 24 hours
 
     # CORS
-   BACKEND_CORS_ORIGINS: List[str] = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    "https://aqua-sense-io-t.vercel.app",
-]
+      # CORS
+    BACKEND_CORS_ORIGINS: List[str] = [
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "https://aqua-sense-io-t.vercel.app",
+    ]
 
     # Database (PostgreSQL)
     POSTGRES_SERVER: str = "localhost"
