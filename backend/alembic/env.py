@@ -22,6 +22,10 @@ from app.models import (
     WeatherObservationModel,
     PredictionModel,
     RecommendationModel,
+    # New in 002 — must be imported so Alembic autogenerate sees them
+    IrrigationEventModel,
+    PasswordResetOTP,
+    EmailBroadcastLog,
 )
 
 # this is the Alembic Config object, which provides
